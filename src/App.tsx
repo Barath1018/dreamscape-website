@@ -3,6 +3,11 @@ import { Moon, BookOpen, Users, LineChart, GraduationCap, MessageCircle } from '
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Features from './components/Features';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
+<GoogleOAuthProvider clientId="870121065859-3tm8drudeglqo16s8leev4uf3ndks93k.apps.googleusercontent.com">
+  <App />
+</GoogleOAuthProvider>
 
 function App() {
   return (
