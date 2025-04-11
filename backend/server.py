@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+<<<<<<< HEAD
 from flask_cors import CORS
 from google.oauth2 import id_token
 from google.auth.transport import requests as grequests
@@ -18,10 +19,26 @@ MODEL_NAME = "gemini-1.5-pro-001"
 GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL_NAME}:generateContent?key={API_KEY}"
 
 # ------------------ DREAM ANALYSIS ENDPOINT ------------------ #
+=======
+import requests
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)  # or use: CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
+
+API_KEY = "API_KEY"
+MODEL_NAME = "gemini-1.5-pro-001"
+url = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL_NAME}:generateContent?key={API_KEY}"
+
+>>>>>>> d61322d (Save work before rebase)
 @app.route('/api/generate', methods=['POST'])
 def generate():
     user_prompt = request.json.get('prompt')
 
+<<<<<<< HEAD
+=======
+    # Refine the prompt to enforce short and organized formatting
+>>>>>>> d61322d (Save work before rebase)
     prompt = (
         f"You are a dream interpretation expert AI. Analyze this dream:\n\n"
         f"{user_prompt}\n\n"
@@ -42,7 +59,11 @@ def generate():
         "Content-Type": "application/json"
     }
 
+<<<<<<< HEAD
     response = http_requests.post(GEMINI_URL, json=data, headers=headers)
+=======
+    response = requests.post(url, json=data, headers=headers)
+>>>>>>> d61322d (Save work before rebase)
 
     if response.status_code == 200:
         try:
@@ -52,6 +73,7 @@ def generate():
                 return jsonify({"insight": output_text})
             else:
                 return jsonify({"error": "No candidates found."}), 500
+<<<<<<< HEAD
         except Exception as e:
             return jsonify({"error": "Unexpected format.", "details": str(e)}), 500
     else:
@@ -89,3 +111,11 @@ def signup():
 # ------------------ MAIN ------------------ #
 if __name__ == '__main__':
     app.run(debug=True)
+=======
+        except:
+            return jsonify({"error": "Unexpected format."}), 500
+    else:
+        return jsonify({"error": "API error", "details": response.text}), response.status_code
+if __name__ == '__main__':
+    app.run(debug=True)
+>>>>>>> d61322d (Save work before rebase)
