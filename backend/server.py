@@ -1,44 +1,21 @@
 from flask import Flask, request, jsonify
-<<<<<<< HEAD
-from flask_cors import CORS
-from google.oauth2 import id_token
-from google.auth.transport import requests as grequests
-import requests as http_requests  # avoid conflict with Flask requests
-from dotenv import load_dotenv
-import os
-
-# Load .env variables
-load_dotenv()
-
-app = Flask(__name__)
-CORS(app)  # allow frontend calls
-
-# Get API key from .env
-API_KEY = os.getenv("API_KEY")
-MODEL_NAME = "gemini-1.5-pro-001"
-GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL_NAME}:generateContent?key={API_KEY}"
-
-# ------------------ DREAM ANALYSIS ENDPOINT ------------------ #
-=======
 import requests
 from flask_cors import CORS
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 CORS(app)  # or use: CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
-API_KEY = "API_KEY"
+API_KEY = "GEMINI_API_KEY"  # Replace with your actual API key
+# Ensure you set the API key as an environment variable or securely manage it
 MODEL_NAME = "gemini-1.5-pro-001"
 url = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL_NAME}:generateContent?key={API_KEY}"
 
->>>>>>> d61322d (Save work before rebase)
 @app.route('/api/generate', methods=['POST'])
 def generate():
     user_prompt = request.json.get('prompt')
 
-<<<<<<< HEAD
-=======
     # Refine the prompt to enforce short and organized formatting
->>>>>>> d61322d (Save work before rebase)
     prompt = (
         f"You are a dream interpretation expert AI. Analyze this dream:\n\n"
         f"{user_prompt}\n\n"
@@ -59,11 +36,7 @@ def generate():
         "Content-Type": "application/json"
     }
 
-<<<<<<< HEAD
-    response = http_requests.post(GEMINI_URL, json=data, headers=headers)
-=======
     response = requests.post(url, json=data, headers=headers)
->>>>>>> d61322d (Save work before rebase)
 
     if response.status_code == 200:
         try:
@@ -73,49 +46,9 @@ def generate():
                 return jsonify({"insight": output_text})
             else:
                 return jsonify({"error": "No candidates found."}), 500
-<<<<<<< HEAD
-        except Exception as e:
-            return jsonify({"error": "Unexpected format.", "details": str(e)}), 500
-    else:
-        return jsonify({"error": "API error", "details": response.text}), response.status_code
-
-# ------------------ GOOGLE LOGIN ENDPOINT ------------------ #
-@app.route('/api/google-auth', methods=['POST'])
-def google_auth():
-    try:
-        token = request.json['token']
-        idinfo = id_token.verify_oauth2_token(token, grequests.Request(), API_KEY)
-
-        user_info = {
-            "name": idinfo.get("name"),
-            "email": idinfo.get("email"),
-            "picture": idinfo.get("picture")
-        }
-        return jsonify({"message": "Login successful", "user": user_info})
-    except ValueError as e:
-        return jsonify({"error": "Token invalid", "details": str(e)}), 400
-
-# ------------------ SIGNUP (MOCK) ------------------ #
-@app.route('/api/signup', methods=['POST'])
-def signup():
-    data = request.json
-    email = data.get("email")
-    password = data.get("password")
-
-    if not email or not password:
-        return jsonify({"error": "Email and password required"}), 400
-
-    print(f"[SIGNUP] Email: {email}, Password: {password}")  # mock storage
-    return jsonify({"message": "Signup successful"})
-
-# ------------------ MAIN ------------------ #
-if __name__ == '__main__':
-    app.run(debug=True)
-=======
         except:
             return jsonify({"error": "Unexpected format."}), 500
     else:
         return jsonify({"error": "API error", "details": response.text}), response.status_code
 if __name__ == '__main__':
     app.run(debug=True)
->>>>>>> d61322d (Save work before rebase)

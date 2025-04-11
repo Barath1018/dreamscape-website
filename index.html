@@ -1,118 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Dream App Login</title>
-  <meta name="google-signin-client_id" content="870121065859-3tm8drudeglqo16s8leev4uf3ndks93k.apps.googleusercontent.com">
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-    }
-    .login-container {
-      max-width: 400px;
-      margin: 50px auto;
-      padding: 2rem;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    input, button {
-      width: 100%;
-      margin-top: 10px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    button {
-      background: #6b46c1;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    a {
-      color: #6b46c1;
-      cursor: pointer;
-    }
-    .g_id_signin {
-      margin-top: 15px;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="login-container">
-    <h2>Dream Journal Login</h2>
-
-    <!-- Login Form -->
-    <form id="login-form">
-      <input type="email" placeholder="Email" required>
-      <input type="password" placeholder="Password" required>
-      <button type="submit">Login</button>
-      <p>Don't have an account? <a onclick="toggleForm('signup')">Sign up</a></p>
-    </form>
-
-    <!-- Sign Up Form -->
-    <form id="signup-form" style="display: none;" onsubmit="handleSignup(event)">
-      <input type="email" id="signup-email" placeholder="Email" required>
-      <input type="password" id="signup-password" placeholder="Password" required>
-      <button type="submit">Sign Up</button>
-      <p>Already have an account? <a onclick="toggleForm('login')">Log in</a></p>
-    </form>
-
-    <!-- Google Auth -->
-    <div id="g_id_onload"
-         data-client_id="870121065859-3tm8drudeglqo16s8leev4uf3ndks93k.apps.googleusercontent.com"
-         data-callback="handleGoogleCallback"
-         data-auto_prompt="false">
-    </div>
-    <div class="g_id_signin"
-         data-type="standard"
-         data-size="large"
-         data-theme="filled_black"
-         data-text="continue_with"
-         data-shape="pill"
-         data-logo_alignment="left">
-    </div>
-  </div>
-
-  <script>
-    function toggleForm(type) {
-      document.getElementById('login-form').style.display = type === 'login' ? 'block' : 'none';
-      document.getElementById('signup-form').style.display = type === 'signup' ? 'block' : 'none';
-    }
-
-    async function handleSignup(event) {
-      event.preventDefault();
-      const email = document.getElementById('signup-email').value;
-      const password = document.getElementById('signup-password').value;
-
-      const res = await fetch("http://localhost:5000/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-      });
-
-      const data = await res.json();
-      alert(data.message || data.error);
-      if (res.ok) toggleForm('login');
-    }
-
-    async function handleGoogleCallback(response) {
-      const res = await fetch("http://localhost:5000/api/google-auth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: response.credential })
-      });
-
-      const data = await res.json();
-      if (res.ok) {
-        alert("Welcome " + data.user.name);
-      } else {
-        alert("Google login failed.");
-      }
-    }
-  </script>
-
-</body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React + TS</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
