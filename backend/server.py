@@ -1,12 +1,13 @@
-You said:
 from flask import Flask, request, jsonify
 import requests
 from flask_cors import CORS
+import os 
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 CORS(app)  # or use: CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
-
-API_KEY = "AIzaSyCHzdvoL2scZw9YL8hx4RuskKCpJJS2TdI"
+load_dotenv()
+API_KEY = os.getenv("GEMINI_API_KEY")
 MODEL_NAME = "gemini-1.5-pro-001"
 url = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL_NAME}:generateContent?key={API_KEY}"
 
